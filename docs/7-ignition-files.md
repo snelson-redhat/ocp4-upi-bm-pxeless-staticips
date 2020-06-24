@@ -168,6 +168,32 @@ create_ifcfg
 modify_ignition
 ```
 
+```yaml
+{
+  "ignition": { "version": "2.0.0" },
+  "networkd": {
+    "units": [
+      {
+        "name": "00-eth.network",
+        "contents": "[Match]\nName=eno5 eno6\n\n[Network]\nBond=bond0"
+      },
+      {
+        "name": "10-bond0.netdev",
+        "contents": "[NetDev]\nName=bond0\nKind=bond"
+      },
+      {
+        "name": "11-vlan120.netdev",
+        "contents": "[NetDev]\nName=bond0.120\nKind=vlan\n\n[VLAN]\nId=120"
+      },
+      {
+        "name": "20-vlan120.network",
+        "contents": "[Match]\nName=bond0.120\n\n[Network]\nAddress=10.240.120.9/24\nDNS=10.242.205.15\nGateway=10.240.120.1"
+      }
+    ]
+  }
+}
+```
+
 NOTE: I'm 100% sure this whole code block can be improved… any suggestions appreciated :)
 
 [<< Previous: Cluster files](6-cluster-files.md) | [README](../README.md) | [Next: RHCOS files >>](8-rhcos-files.md)
